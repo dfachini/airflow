@@ -17,7 +17,7 @@ default_args = {
 
 # [START instantiate_dag]
 dag = DAG(
-    'test-data-pipeline',
+    'david-pipeline',
     default_args=default_args,
     start_date=datetime(2021, 3, 18),
     schedule_interval='@weekly',

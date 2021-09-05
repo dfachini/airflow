@@ -19,7 +19,7 @@ default_args = {
 dag = DAG(
     'test-data-pipeline',
     default_args=default_args,
-    start_date=datetime(2021, 3, 18),
+    start_date=datetime(2021, 9, 5),
     schedule_interval='@weekly',
     tags=['test', 'development', 'bash'])
 # [END instantiate_dag]

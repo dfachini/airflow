@@ -59,9 +59,9 @@ with DAG(
 
 # [START basic_task]
     query_mongo_task = PythonVirtualenvOperator(
-    task_id='list_mongo_data_id',
-    python_callable=query_mongo_collection,
-    requirements=["pymongo"],
+        task_id='list_mongo_data_id',
+        python_callable=query_mongo_collection,
+        requirements=["pymongo"],
     )
 
     extract_mongo_task = PythonVirtualenvOperator(

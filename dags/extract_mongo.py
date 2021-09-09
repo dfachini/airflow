@@ -6,10 +6,10 @@ from airflow.utils.dates import days_ago
 from datetime import timedelta
 # [END import_module]
 
-# [START MongoDB Connector]
-client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp%@mongodb.airflow.svc.cluster.local:27017')
-db = client.mongo
-# [END MongoDB Connector]
+# # [START MongoDB Connector]
+# client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp%@mongodb.airflow.svc.cluster.local:27017')
+# db = client.mongo
+# # [END MongoDB Connector]
 
 # [START Query MongoDB Data Collection Produtos]
 def query_mongo_collection():
@@ -17,6 +17,11 @@ def query_mongo_collection():
     import json
     import pandas as pd
     from pandas.io.json import json_normalize
+
+# [START MongoDB Connector]
+    client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp%@mongodb.airflow.svc.cluster.local:27017')
+    db = client.mongo
+# [END MongoDB Connector]
 
     for x in db["Produtos"].find():
         df = pd.json_normalize(x)

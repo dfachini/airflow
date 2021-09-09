@@ -63,13 +63,13 @@ with DAG(
     python_callable=query_mongo_collection,
     requirements=["pymongo"],
     )
-    
+
     extract_mongo_task = PythonVirtualenvOperator(
-        task_id='extract_mongodb_id'
+        task_id='extract_mongodb_id',
         python_callable=extract_mongo,
         requirements=["pymongo"],
     )
-    
+
     list_csv_file_task = BashOperator(
         task_id='cat_csv_file',
         bash_command='cat /tmp/mongo.csv',

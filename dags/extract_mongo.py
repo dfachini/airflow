@@ -27,6 +27,7 @@ def query_mongo_collection(ti):
         df = pd.json_normalize(x)
     print(df.head())
     ti.xcom_push(key='dfCollection', value=df)
+    return df
 # [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]

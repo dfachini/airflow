@@ -64,19 +64,19 @@ with DAG(
 
 # [START basic_task]
     query_mongo_task = PythonVirtualenvOperator(
-        task_id='list_mongo_data_id',
+        task_id='query_mongo_data',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
     )
 
     extract_mongo_task = PythonVirtualenvOperator(
-        task_id='extract_mongodb_id',
+        task_id='extract_mongodb_to_csv',
         python_callable=extract_mongo,
         requirements=["pymongo"],
     )
 
     list_csv_file_task = BashOperator(
-        task_id='cat_csv_file',
+        task_id='cat_csv_to_file',
         bash_command='cat /tmp/mongo.csv',
     )
 # [END basic_task]

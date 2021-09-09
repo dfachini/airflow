@@ -81,4 +81,4 @@ with DAG(
     )
 # [END basic_task]
 
-list_mongo_task >> extract_mongo_task >> list_csv_file_task
+query_mongo_task >> extract_mongo_task >> list_csv_file_task

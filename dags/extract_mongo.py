@@ -12,7 +12,7 @@ from datetime import timedelta
 # # [END MongoDB Connector]
 
 # [START Query MongoDB Data Collection Produtos]
-def query_mongo_collection(ti):
+def query_mongo_collection(**context):
     import pymongo
     import json
     import pandas as pd
@@ -26,18 +26,22 @@ def query_mongo_collection(ti):
     for x in db["produtos"].find():
         df = pd.json_normalize(x)
     print(df.head())
-    ti.xcom_push(key='dfCollection', value=df)
+    # ti.xcom_push(key='dfCollection', value=df)
+    context["tasks_instance"].xcom_push(key='dfCollection', value=df)
     return df
 # [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]
-def extract_mongo(ti):
+def extract_mongo(**context):
     import pymongo
     import json
     import pandas as pd
     from pandas.io.json import json_normalize
 
-    ti.xcom_pull(key='dfCollection', task_ids=['query_mongo_task'])
+    # ti.xcom_pull(key='dfCollection', task_ids=['query_mongo_task'])
+    df = context["tasks_instance"].xcom_pull(
+        task_ids="query_mongo_task", key="dfCollection"
+    )
     df.to_csv('/tmp/mongo.csv')
     print("Extração Finalizada.")
     return 'Extract mongoDB completed.'
@@ -67,20 +71,20 @@ with DAG(
 
 # [START basic_task]
     query_mongo_task = PythonVirtualenvOperator(
-        task_id='query_mongo_data',
+        task_id='query_mongo_task',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
-        # ti.xcom_push=True,
+        ti.xcom_push=True,
     )
 
     extract_mongo_task = PythonVirtualenvOperator(
-        task_id='extract_mongodb_to_csv',
+        task_id='extract_mongo_task',
         python_callable=extract_mongo,
         requirements=["pymongo"],
     )
 
     list_csv_file_task = BashOperator(
-        task_id='cat_csv_to_file',
+        task_id='list_csv_file_task',
         bash_command='cat /tmp/mongo.csv',
     )
 # [END basic_task]

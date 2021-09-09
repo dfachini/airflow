@@ -74,7 +74,7 @@ with DAG(
         task_id='query_mongo_task',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
-        ti.xcom_push=True,
+        # ti.xcom_push=True,
     )
 
     extract_mongo_task = PythonVirtualenvOperator(

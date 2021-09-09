@@ -19,8 +19,8 @@ def query_mongo_collection():
     from pandas.io.json import json_normalize
 
 # [START MongoDB Connector]
-    client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017/mongo')
-    db = client['mongo']
+    client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017')
+    db = client.mongo
 # [END MongoDB Connector]
 
     for x in db["produtos"].find():

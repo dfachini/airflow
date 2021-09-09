@@ -24,8 +24,10 @@ def query_mongo_collection(**context):
 # [END MongoDB Connector]
 
     for x in db["produtos"].find():
-        df = pd.json_normalize(x)
-    print(df.head())
+        # df = pd.json_normalize(x)
+        df = x
+    print(df)
+    # print(df.head())
     # ti.xcom_push(key='dfCollection', value=df)
     context["tasks_instance"].xcom_push(key='dfCollection', value=df)
     return df
@@ -74,6 +76,7 @@ with DAG(
         task_id='query_mongo_task',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
+        provide_context=True,
         # ti.xcom_push=True,
     )
 
@@ -81,6 +84,7 @@ with DAG(
         task_id='extract_mongo_task',
         python_callable=extract_mongo,
         requirements=["pymongo"],
+        provide_context=True,
     )
 
     list_csv_file_task = BashOperator(

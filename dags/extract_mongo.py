@@ -11,18 +11,17 @@ client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp%@mongodb.airflow.svc.clu
 db = client.mongo
 # [END MongoDB Connector]
 
-# [START List MongoDB Data Collection Produtos]
-def list_mongo_collection():
+# [START Query MongoDB Data Collection Produtos]
+def query_mongo_collection():
     import pymongo
     import json
     import pandas as pd
     from pandas.io.json import json_normalize
 
-for x in db["Produtos"].find():
-    df = pd.json_normalize(x)
-
-print(df.head())
-# [END List MongoDB Data Collection Produtos]
+    for x in db["Produtos"].find():
+        df = pd.json_normalize(x)
+    print(df.head())
+# [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]
 def extract_mongo():
@@ -31,9 +30,9 @@ def extract_mongo():
     import pandas as pd
     from pandas.io.json import json_normalize
 
-df.to_csv('/tmp/mongo.csv')
-print("Extração Finalizada.")
-return 'Extract mongoDB completed.'
+    df.to_csv('/tmp/mongo.csv')
+    print("Extração Finalizada.")
+    return 'Extract mongoDB completed.'
 # [END Extract MongoDB Data]
 
 # [START default_args]
@@ -59,9 +58,9 @@ with DAG(
 # [END instantiate_dag]
 
 # [START basic_task]
-list_mongo_task = PythonVirtualenvOperator(
+query_mongo_task = PythonVirtualenvOperator(
     task_id='list_mongo_data_id',
-    python_callable=list_mongo_collection,
+    python_callable=query_mongo_collection,
     requirements=["pymongo"],
 )
 
@@ -73,7 +72,7 @@ extract_mongo_task = PythonVirtualenvOperator(
 
 list_csv_file_task = BashOperator(
     task_id='cat_csv_file',
-    bash_command='cat /tmp/mongo.csv'
+    bash_command='cat /tmp/mongo.csv',
 )
 # [END basic_task]
 

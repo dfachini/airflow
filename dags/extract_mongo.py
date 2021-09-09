@@ -30,7 +30,7 @@ def query_mongo_collection(ti):
 # [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]
-def extract_mongo():
+def extract_mongo(ti):
     import pymongo
     import json
     import pandas as pd

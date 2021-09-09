@@ -12,7 +12,7 @@ from datetime import timedelta
 # # [END MongoDB Connector]
 
 # [START Query MongoDB Data Collection Produtos]
-def query_mongo_collection():
+def query_mongo_collection(ti):
     import pymongo
     import json
     import pandas as pd
@@ -26,6 +26,7 @@ def query_mongo_collection():
     for x in db["produtos"].find():
         df = pd.json_normalize(x)
     print(df.head())
+    ti.xcom_push(key='dfCollection', value=df)
 # [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]
@@ -35,6 +36,7 @@ def extract_mongo():
     import pandas as pd
     from pandas.io.json import json_normalize
 
+    ti.xcom_pull(key='dfCollection', task_ids=['query_mongo_task'])
     df.to_csv('/tmp/mongo.csv')
     print("Extração Finalizada.")
     return 'Extract mongoDB completed.'
@@ -67,6 +69,7 @@ with DAG(
         task_id='query_mongo_data',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
+        # ti.xcom_push=True,
     )
 
     extract_mongo_task = PythonVirtualenvOperator(

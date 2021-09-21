@@ -12,7 +12,7 @@ from datetime import timedelta
 # # [END MongoDB Connector]
 
 # [START Query MongoDB Data Collection Produtos]
-def query_mongo_collection(**context):
+def query_mongo_collection():
     import pymongo
     import json
     import pandas as pd
@@ -24,26 +24,24 @@ def query_mongo_collection(**context):
 # [END MongoDB Connector]
 
     for x in db["produtos"].find():
-        # df = pd.json_normalize(x)
-        df = x
-    print(df)
-    # print(df.head())
+        df = pd.json_normalize(x)
+    print(df.head())
     # ti.xcom_push(key='dfCollection', value=df)
-    context["tasks_instance"].xcom_push(key='dfCollection', value=df)
+    # context["tasks_instance"].xcom_push(key='dfCollection', value=df)
     return df
 # [END Query MongoDB Data Collection Produtos]
 
 # [START Extract MongoDB Data]
-def extract_mongo(**context):
+def extract_mongo():
     import pymongo
     import json
     import pandas as pd
     from pandas.io.json import json_normalize
 
     # ti.xcom_pull(key='dfCollection', task_ids=['query_mongo_task'])
-    df = context["tasks_instance"].xcom_pull(
-        task_ids="query_mongo_task", key="dfCollection"
-    )
+    # df = context["tasks_instance"].xcom_pull(
+    #     task_ids="query_mongo_task", key="dfCollection"
+    # )
     df.to_csv('/tmp/mongo.csv')
     print("Extração Finalizada.")
     return 'Extract mongoDB completed.'
@@ -72,7 +70,8 @@ with DAG(
 # [END instantiate_dag]
 
 # [START basic_task]
-    query_mongo_task = PythonVirtualenvOperator(
+    # query_mongo_task = PythonVirtualenvOperator(
+    query_mongo_task = PythonOperator(
         task_id='query_mongo_task',
         python_callable=query_mongo_collection,
         requirements=["pymongo"],
@@ -80,7 +79,8 @@ with DAG(
         # ti.xcom_push=True,
     )
 
-    extract_mongo_task = PythonVirtualenvOperator(
+    # extract_mongo_task = PythonVirtualenvOperator(
+    extract_mongo_task = PythonOperator(
         task_id='extract_mongo_task',
         python_callable=extract_mongo,
         requirements=["pymongo"],

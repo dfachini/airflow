@@ -16,17 +16,28 @@ from pandas.io.json import json_normalize
 
 # [START MongoDB Connector]
     # client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017')
-def test_iron():
+# def test_iron():
     # from airflow.hooks.base_hook import BaseHook
     # conn = BaseHook.get_connection('iron_analytics_db')
     # show_collection = conn._user.find().pretty()
     # db = conn.
     # print(conn)
     # print(show_collection)
-    client = pymongo.MongoClient('mongodb://data_user:QZxYj4przhCXbFC@production-cassi.5tg5o.mongodb.net:27017/analytics_db')
-    db = client.analytics_db
-    show_collection = db['_user'].find().pretty()
-    print(show_collection)
+    # client = pymongo.MongoClient('mongodb://data_user:QZxYj4przhCXbFC@production-cassi.5tg5o.mongodb.net:27017/analytics_db')
+    # db = client.analytics_db
+    # show_collection = db['_user'].find().pretty()
+    # print(show_collection)
+
+
+#Teste Cris INICIO
+def test_iron():
+from mongo_plugin.hooks.mongo_hook import MongoHook    
+    mongo = MongoHook(conn_id=iron_analytics_db)
+    db = mongo.iron_analytics_db
+    for x in db["_user"].find():
+        df = pd.json_normalize(x)
+    print(df)
+#Teste Cris FINAL
 # [END MongoDB Connector]
 
 # [START default_args]

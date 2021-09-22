@@ -45,7 +45,7 @@ default_args = {
     'owner': 'david fachini',
     'depends_on_past': False,
     'email': ['david.fachini@gmail.com'],
-    'email_on_failure': True,
+    'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
     'retry_delay': timedelta(minutes=5)}
@@ -58,6 +58,7 @@ with DAG(
     description='Query and Export MongoDB Data',
     schedule_interval=timedelta(days=1),
     start_date=days_ago(2),
+    catchup=False,
     tags=['mongodb', 'query', 'extraction'],
 ) as dag:
 # [END instantiate_dag]

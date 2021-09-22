@@ -23,7 +23,7 @@ def test_iron():
     # db = conn.
     # print(conn)
     # print(show_collection)
-    client = pymongo.MongoClient('mongodb://data_user:QZxYj4przhCXbFC@production-cassi.5tg5o.mongodb.net:27017')
+    client = pymongo.MongoClient('mongodb://data_user:QZxYj4przhCXbFC@production-cassi.5tg5o.mongodb.net:27017/analytics_db')
     db = client.analytics_db
     show_collection = db['_user'].find().pretty()
     print(show_collection)

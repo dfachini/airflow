@@ -19,8 +19,12 @@ def query_mongo_collection():
     from pandas.io.json import json_normalize
 
 # [START MongoDB Connector]
-    client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017/mongo')
-    db = client['mongo']
+    try:
+        client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017/mongo')
+        db = client['mongo']
+        print("Conectado com Sucesso")
+    except Exception as com_erro:
+        print(com_erro)
 # [END MongoDB Connector]
 
     for x in db["produtos"].find():

@@ -19,8 +19,10 @@ from pandas.io.json import json_normalize
 def test_iron():
     from airflow.hooks.base_hook import BaseHook
     conn = BaseHook.get_connection('iron_analytics_db')
+    show_collection = conn._user.find().pretty()
     # db = conn.
     print(conn)
+    print(show_collection)
 # [END MongoDB Connector]
 
 # [START default_args]

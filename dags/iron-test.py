@@ -16,10 +16,43 @@ from pandas.io.json import json_normalize
 
 # [START MongoDB Connector]
     # client = pymongo.MongoClient('mongodb://root:VQLnZB1QIp@mongodb.airflow.svc.cluster.local:27017')
-from airflow.hooks.base_hook import BaseHook
-conn = BaseHook.get_connection('iron_analytics_db')
-# db = conn.
-print(conn)
+def test_iron():
+    from airflow.hooks.base_hook import BaseHook
+    conn = BaseHook.get_connection('iron_analytics_db')
+    # db = conn.
+    print(conn)
 # [END MongoDB Connector]
 
+# [START default_args]
+default_args = {
+    'owner': 'david fachini',
+    'depends_on_past': False,
+    'email': ['david.fachini@gmail.com'],
+    'email_on_failure': True,
+    'email_on_retry': False,
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5)}
+# [END default_args]
 
+# [START instantiate_dag]
+with DAG(
+    'iron-test',
+    default_args=default_args,
+    description='Test Connection with Mongo-Iron',
+    schedule_interval=timedelta(days=1),
+    start_date=days_ago(2),
+    tags=['mongodb', 'conn', 'iron'],
+) as dag:
+# [END instantiate_dag]
+
+# [START basic_task]
+    # query_mongo_task = PythonVirtualenvOperator(
+    query_mongo_task = PythonOperator(
+        task_id='test_conn',
+        python_callable=test_iron,
+        # requirements=["pymongo"],
+        provide_context=True,
+        # ti.xcom_push=True,
+    )
+
+query_mongo_task
